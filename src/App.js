@@ -1,25 +1,41 @@
-import logo from './logo.svg';
+import {useEffect, useState} from 'react'
 import './App.css';
+import { TaskCreator } from './components/TaskCreator.js'
+import {TaskTable} from './components/TaskTable'
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
+const [tasksItems, setTasksItems]  = useState([])
+
+  function createNewTask(taskName) {
+    setTasksItems([...tasksItems, {name: taskName, done:false}])
+  }
+  const toggleTask = task =>{
+    tasksItems.map(t => (t.name == task.name) ? {...t, done: !t.done}: t)
+  }
+  useEffect(()=>{
+   let data = localStorage.getItem('tasks')
+   if (data){
+    setTasksItems(JSON.parse(data))
+   }  
+  }, [ ])
+
+  useEffect( () => {
+   localStorage.setItem('tasks', JSON.stringify(tasksItems))
+    }, [tasksItems])
+
+
+    return (
+      <div className="App">
+      <TaskCreator createNewTask={createNewTask}/>
+      <TaskTable tasks= {tasksItems}/>
+     
+    
+
+
+      </div>
+    )
+  
+}
 export default App;
