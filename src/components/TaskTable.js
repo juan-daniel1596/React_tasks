@@ -12,7 +12,7 @@ return(
             {
 
               tasks.map (task =>(
-               <TasksRow task={task}/>
+               <TasksRow task={task} key={task.name}/>
               ))
 
             }
